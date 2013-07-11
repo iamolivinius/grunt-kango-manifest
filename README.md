@@ -1,6 +1,6 @@
-# grunt-chrome-manifest
+# grunt-kango-manifest
 
-> get scripts/css file list from manifest to handle, and initialize the grunt configuration appropriately, and automatically. then replaces references to non-optimized scripts into the transformed background scripts. and auto increment build version in manifest.json.
+> get scripts file list from kango_extension.json to handle, and initialize the grunt configuration appropriately, and automatically. then replaces references to non-optimized scripts into the transformed background scripts. and auto increment build version in extension_info.json.
 
 Watch out, this task is designed for Grunt 0.4 and upwards.
 
@@ -8,14 +8,14 @@ Watch out, this task is designed for Grunt 0.4 and upwards.
 If you haven't used [grunt][] before, be sure to check out the [Getting Started][] guide, as it explains how to create a [gruntfile][Getting Started] as well as install and use grunt plugins. Once you're familiar with that process, install this plugin with this command:
 
 ```shell
-npm install grunt-chrome-manifest --save-dev
+npm install grunt-kango-manifest --save-dev
 ```
 
 Once the plugin has been installed, it may be enabled inside your Gruntfile with this line of JavaScript:
 
 ```js
-grunt.loadNpmTasks('grunt-chrome-manifest');
-grunt.registerTask('default', ['chromeManifest:dist']);
+grunt.loadNpmTasks('grunt-kango-manifest');
+grunt.registerTask('default', ['kangoManifest:dist']);
 ```
 
 
@@ -26,7 +26,7 @@ grunt.registerTask('default', ['chromeManifest:dist']);
 
 ### Example usage
 ```javascript
-chromeManifest: {
+kangoManifest: {
   dist: {
     options: {
       buildnumber: true,
