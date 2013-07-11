@@ -2,11 +2,11 @@
 
 var path = require('path');
 
-module.exports = function (grunt) {
+module.exports = function(grunt) {
 
   var _ = grunt.util._;
 
-  grunt.registerMultiTask('chromeManifest', '', function () {
+  grunt.registerMultiTask('kangoManifest', '', function() {
     var options = this.options({
       buildnumber: false,
       background: 'background.js',
@@ -15,10 +15,10 @@ module.exports = function (grunt) {
       indentSize: 4
     });
 
-    this.files.forEach(function (file) {
+    this.files.forEach(function(file) {
       var src = file.src[0];
       var dest = file.dest;
-      var manifest = grunt.file.readJSON(path.join(src, 'manifest.json'));
+      var manifest = grunt.file.readJSON(path.join(src, 'extension_info.json'));
       var background = path.join(dest, options.background);
       var concat = grunt.config('concat') || {};
       var uglify = grunt.config(options.uglify) || {};
@@ -31,7 +31,7 @@ module.exports = function (grunt) {
         dest: background
       };
 
-      _.each(manifest.background.scripts, function (script) {
+      _.each(manifest.background_scripts, function(script) {
         concat.background.src.push(path.join(src, script));
       });
 
@@ -39,14 +39,14 @@ module.exports = function (grunt) {
       uglify[background] = background;
 
       // update uglify and css config for content scripts field.
-      _.each(manifest.content_scripts, function (contentScript) {
-        _.each(contentScript.js, function (js) {
-          uglify[path.join(dest, js)] = path.join(src, js);
-        });
+      _.each(manifest.content_scripts, function(contentScript) {
+        // _.each(contentScript.js, function (js) {
+        uglify[path.join(dest, contentScript)] = path.join(src, contentScript);
+        // });
 
-        _.each(contentScript.css, function (css) {
-          cssmin[path.join(dest, css)] = path.join(src, css);
-        });
+        // _.each(contentScript.css, function (css) {
+        //   cssmin[path.join(dest, css)] = path.join(src, css);
+        // });
       });
 
       // update grunt configs.
@@ -56,7 +56,7 @@ module.exports = function (grunt) {
 
       // set updated build number to manifest on dest.
       if (options.buildnumber) {
-        var versionUp = function (numbers, index) {
+        var versionUp = function(numbers, index) {
           if (!numbers[index]) {
             throw 'Build number overflow.' + numbers;
           }
@@ -68,14 +68,14 @@ module.exports = function (grunt) {
           }
         };
         manifest.version = versionUp(buildnumber, buildnumber.length - 1);
-        grunt.file.write(path.join(src, 'manifest.json'), JSON.stringify(manifest, null, options.indentSize));
+        grunt.file.write(path.join(src, 'extension_info.json'), JSON.stringify(manifest, null, options.indentSize));
       }
 
       // set updated background script list to manifest on dest.
-      manifest.background.scripts = [options.background];
+      manifest.background_scripts = [options.background];
 
       // write updated manifest to dest path
-      grunt.file.write(path.join(dest, 'manifest.json'), JSON.stringify(manifest, null, options.indentSize));
+      grunt.file.write(path.join(dest, 'extension_info.json'), JSON.stringify(manifest, null, options.indentSize));
     });
   });
 };
